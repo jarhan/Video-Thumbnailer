@@ -9,6 +9,24 @@ This project consists of 3 milestones. They're aimed at splitting up work into s
 
 * Milestone 3: Build a demo site. This will showcase the work we've done by letting the user upload video files and view the results as a webpage.
 
+Folder Structure Conventions
+============================
+
+> Folder structure options and naming conventions for this project
+
+### A typical top-level directory layout
+
+    .
+    ├── Dockerfile                  
+    ├── docker-compose.yml          
+    ├── make_thumbnail.sh            # Compiled files
+    ├── resources                    # Resources Files (volume mapping to docker)
+    │   ├── video                    # Contain Videos (to be converted to .gif)
+    │   ├── frames                   # Contain Frames (extracted from video)
+    │   └── gif                      # Contain .gif (final output to be returned)
+    ├── .gitignore
+    └── README.md
+
 
 # Milestone 1: The Basic Thumbnail Pipeline
 The goal of this milestone is to make a Docker container that has all the relevant tools and a script/program that you write so that it can take a video file as input and generate an animated GIF file as output. The pipeline involves the following steps:
