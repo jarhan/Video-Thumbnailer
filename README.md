@@ -11,13 +11,16 @@ This project consists of 3 milestones. They're aimed at splitting up work into s
 
 
 # Milestone 1: The Basic Thumbnail Pipeline
-## Getting Started
 The goal of this milestone is to make a Docker container that has all the relevant tools and a script/program that you write so that it can take a video file as input and generate an animated GIF file as output. The pipeline involves the following steps:
 
-Extract the frames that you wish to show in the output
-Resize the frames to the right size (pick one that is no smaller than 320x240.)
-Construct an animated GIF out of these frames.
+1. Extract the frames that you wish to show in the output
+2. Resize the frames to the right size (pick one that is no smaller than 320x240.)
+3. Construct an animated GIF out of these frames.
+
 Off-the-shelf tools can accomplish one or more of such tasks in a single command. You'll begin by researching how to make an animated GIF from a video file using command-line tools.
+
+## Getting Started
+Write a single script that, using a combination of tools, takes a video file as input and generates an animated GIF file as output. To have a controlled environment, your scripts and associated programs/packages will be housed in a (Docker) container.
 
 ### Prerequisites
 * [Docker](https://www.docker.com/)
