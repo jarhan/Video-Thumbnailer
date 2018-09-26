@@ -38,7 +38,7 @@ docker build -t video_thumbnailer .
 ```
 Run Docker
 ```
-docker run -v /path/to/video/:/path/to/working_dir video_thumbnailer make_thumbnail sample.mp4 output.gif
+docker run -v $(pwd)/resources:/resources video_thumbnailer make_thumbnail sample.mp4 output.gif
 ```
 
 ## Built With
