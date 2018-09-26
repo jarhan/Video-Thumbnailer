@@ -1,0 +1,7 @@
+version: '3'
+
+services:
+  video_thumbnailer:
+    container_name: videothumbnailer
+    build: .
+    image: video_thumbnailer
