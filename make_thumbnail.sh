@@ -6,7 +6,7 @@ min_w=320
 min_h=240
 
 # extract frames from video
-ffmpeg -i resources/video/$video_name -ss 00:00:00 -vframes 20 -filter:v fps=fps=1/2 resources/frames/frame_%02d.bmp
+ffmpeg -ss 00:00:00 -i resources/video/$video_name -vframes 20 -filter:v fps=fps=1/2 resources/frames/frame_%02d.bmp
 
 # get image size
 image_widht=$(convert resources/frames/frame_01.bmp -print "%wx%h" /dev/null | cut -d'x' -f1)
