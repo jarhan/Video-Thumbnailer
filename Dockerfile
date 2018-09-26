@@ -8,9 +8,8 @@ RUN mkdir output
 # FFMPEG
 RUN apt-get update
 RUN apt-get install -y ffmpeg
+RUN apt-get install -y imagemagick
 
 COPY ./make_thumbnail.sh /usr/local/bin/make_thumbnail
-
-#ENTRYPOINT ["make_thumbnail.sh"]
 
 CMD ["make_thumbnail"]
