@@ -29,3 +29,6 @@ echo $gif_size
 
 # generate .gif
 convert -resize $gif_size -delay 30 -loop 0 resources/frames/frame_*.bmp resources/gif/$output_name
+
+# delete created frames
+rm -f resources/frames/frame_*.bmp
