@@ -23,7 +23,9 @@ image_height=$(( $image_height * $min_w / $image_widht ))
 image_widht="$min_w"
 fi
 
-gif_size=${image_widht}x${image_height}
+gif_size=${image_widht}x${image_height}!
+
+echo $gif_size
 
 # generate .gif
 convert -resize $gif_size -delay 30 -loop 0 resources/frames/frame_*.bmp resources/gif/$output_name
