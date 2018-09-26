@@ -32,7 +32,7 @@ git clone https://github.com/jarhan/Video-Thumbnailer.git
 
 ## Running the tests
 
-Build Docker IMAGE name is 'video_thumbnailer'
+Build Docker IMAGE named 'video_thumbnailer'
 ```
 docker build -t video_thumbnailer .
 ```
