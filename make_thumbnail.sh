@@ -7,6 +7,8 @@ echo "Hello World!!"
 echo $video_name
 echo $output_name
 
+echo $video_name $output_name >> output/test.txt
+
 #./ffmpeg -i $video_name -filter:v fps=fps=1/2 extracted_frames/frame_%0d.bmp
 ##./ffmpeg -i $video_name -r 1/1 frame%03d.bmp
 #

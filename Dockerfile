@@ -3,10 +3,10 @@ FROM ubuntu:14.04
 
 WORKDIR /
 
-COPY ./make_thumbnail.sh /usr/local/bin/make_thumbnail.sh
+COPY ./make_thumbnail.sh /usr/local/bin/make_thumbnail
 
 RUN mkdir output
 
-CMD /usr/local/bin/make_thumbnail.sh
+#ENTRYPOINT ["make_thumbnail.sh"]
 
-ENTRYPOINT ["make_thumbnail.sh"]
+CMD ["make_thumbnail"]
