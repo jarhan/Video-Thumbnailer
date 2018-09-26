@@ -6,22 +6,24 @@ min_w=320
 min_h=240
 
 # extract frames from video
-ffmpeg -i $video_name -filter:v fps=fps=1/2 output/frame_%0d.bmp
+ffmpeg -i resources/video/$video_name -ss 00:00:00 -vframes 20 -filter:v fps=fps=1/2 resources/frames/frame_%02d.bmp
 
 # get image size
-image_widht=$(convert output/frame_1.bmp -print "%wx%h" /dev/null | cut -d'x' -f1)
-image_height=$(convert output/frame_1.bmp -print "%wx%h" /dev/null | cut -d'x' -f2)
+image_widht=$(convert resources/frames/frame_01.bmp -print "%wx%h" /dev/null | cut -d'x' -f1)
+image_height=$(convert resources/frames/frame_01.bmp -print "%wx%h" /dev/null | cut -d'x' -f2)
 
 # convert frame size for no smaller than 320x240
-if [[ $image_height < $min_h ]]; then
+if [[ $image_height -lt $min_h ]]; then
 image_widht=$(( $image_widht * $min_h / $image_height ))
 image_height="$min_h"
 fi
 
-if [[ $image_widht < $min_w ]]; then
+if [[ $image_widht -lt $min_w ]]; then
 image_height=$(( $image_height * $min_w / $image_widht ))
 image_widht="$min_w"
 fi
 
+gif_size=${image_widht}x${image_height}
+
 # generate .gif
-convert -delay 60 -loop 0 output/frame_*.bmp output/animated.gif
+convert -resize $gif_size -delay 30 -loop 0 resources/frames/frame_*.bmp resources/gif/$output_name
