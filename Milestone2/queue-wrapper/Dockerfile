@@ -6,6 +6,7 @@ COPY requirements.txt /app/requirements.txt
 
 # Install all the requirements
 RUN pip install -r /app/requirements.txt
+RUN pip install requests
 
 # Copy everthing from . to /app inside the 'box'
 COPY . /app

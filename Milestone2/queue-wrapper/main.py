@@ -26,5 +26,27 @@ def post_factor_job():
     RedisResource.conn.rpush(
         RedisResource.QUEUE_NAME,
         json_packed)
-    
+
+    return jsonify({'status': 'OK'})
+
+@app.route('/list-sos', methods=['GET'])
+def get_sos_list():
+    body = request.json
+    json_packed = json.dumps(body)
+    print('packed:', json_packed)
+    RedisResource.conn.rpush(
+        RedisResource.QUEUE_NAME,
+        json_packed)
+
+    return jsonify({'status': 'OK'})
+
+@app.route('/make-thumbnail', methods=['POST'])
+def make_thumbnail():
+    body = request.json
+    json_packed = json.dumps(body)
+    print('packed:', json_packed)
+    RedisResource.conn.rpush(
+        RedisResource.QUEUE_NAME,
+        json_packed)
+
     return jsonify({'status': 'OK'})
