@@ -7,6 +7,9 @@ target_object_name="$4"
 min_w=320
 min_h=240
 
+echo $target_bucket_name
+echo $target_object_name
+
 # extract frames from video
 ffmpeg -ss 00:00:00 -i resources/video/$video_name -vframes 20 -filter:v fps=fps=1/2 resources/frames/frame_%02d.bmp
 
@@ -29,10 +32,10 @@ gif_size=${image_widht}x${image_height}!
 
 echo $gif_size
 
-mkdir ${target_bucket_name}
+mkdir resources/gif/${target_bucket_name}
 
 # generate .gif
-convert -resize $gif_size -delay 30 -loop 0 resources/frames/frame_*.bmp resources/gif/$target_bucket_name/$target_object_name
+convert -resize $gif_size -delay 30 -loop 0 resources/frames/frame_*.bmp resources/gif/${target_bucket_name}/${target_object_name}.gif
 
 # delete created frames
 rm -f resources/frames/frame_*.bmp
