@@ -22,4 +22,4 @@ COPY . /app
 WORKDIR /app
 
 # How to run it when we start up the box?
-CMD ["./factor_worker.py"]
+CMD ["./thumbnail_worker.py"]
