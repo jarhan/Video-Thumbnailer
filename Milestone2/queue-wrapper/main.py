@@ -48,6 +48,24 @@ def get_sos_list():
 
     return jsonify({'status': 'OK'})
 
+@app.route('/<bucket_name>', methods=['GET'])
+def list_gif_in_bucket(bucket_name):
+    LOG.info("in list_gif_in_bucket")
+    LOG.info(request.args)
+    LOG.info(bucket_name)
+    if (request.args.get('list') == ''):
+        objects = list_objects_in_bucket(bucket_name)
+        gif_collector = []
+        if not objects:
+            return jsonify({'status': 'BAD REQUEST', 'error': 'Bucket not exists'}), 400
+        for obj in objects:
+            object_name = obj['name']
+            if object_name.endswith(".gif"):
+                gif_collector.append(obj)
+        return jsonify({'gif': gif_collector})
+
+    return jsonify({'status': 'BAD REQUEST'}), 400
+
 @app.route('/make-thumbnail', methods=['POST'])
 def make_thumbnail():
     try:
@@ -61,18 +79,11 @@ def make_thumbnail():
         if 'object' not in body:
             loop_push_in_queue(body)
         else: # contain both bucket_name and object_name
-            # if 'target_object' not in body:
-            #     body['target_object'] = body['object'] + ".gif"
-            # else:
-            #     target_object_name = body['target_object']
-            #     if not target_object_name.endswith(".gif"):
-            #         body['target_object'] = target_object_name + ".gif"
             new_body = check_target_object_name(body)
-            LOG.info(new_body)
             push_in_queue(new_body)
         return jsonify({'status': 'OK'})
     except Exception as ex:
-        return jsonify({'status': 'BAD REQUEST', 'error description': ex.args}), 400
+        return jsonify({'status': 'BAD REQUEST', 'error': ex.args}), 400
 
 def check_target_object_name(body):
     if 'target_object' not in body:
@@ -96,9 +107,12 @@ def loop_push_in_queue(body):
         push_in_queue(body)
 
 def list_objects_in_bucket(bucket_name):
-    r = requests.get(SOS_BASE_URL + '/' + bucket_name + '?list')
-    resp = r.json()
-    return resp['objects']
+    try:
+        r = requests.get(SOS_BASE_URL + '/' + bucket_name + '?list')
+        resp = r.json()
+        return resp['objects']
+    except:
+        return []
 
 def push_in_queue(body):
     LOG.info("in push_in_queue")
