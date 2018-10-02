@@ -47,20 +47,21 @@ def watch_queue(redis_conn, queue_name, callback_func, timeout=30):
             if task:
                 callback_func(task)
 
-def download_object(bucket_name, object_name):
+def download_object(bucket_name, object_name, target_bucket_name, target_object_name):
     try:
-        # os.path.exists(path)
-        file_path = "./resources/video/"+bucket_name+"/"+object_name
+        bucket_path = "./resources/video/"+bucket_name
 
-        # my_file = Path(file_path)
-        if (not os.path.exists(file_path)):
+        if (not os.path.exists(bucket_path)):
             os.mkdir("./resources/video/"+bucket_name)
-            r = requests.get(SOS_BASE_URL + '/' + bucket_name + '/' + object_name)
+            object_path = bucket_path+"/"+object_name
+            if (not os.path.exists(object_path)):
+                r = requests.get(SOS_BASE_URL + '/' + bucket_name + '/' + object_name)
 
-            response = r.content
+                response = r.content
 
-            f= open("./resources/video/"+bucket_name+"/"+object_name,"wb")
-            f.write(response)
+                f= open("./resources/video/"+bucket_name+"/"+object_name,"wb")
+                f.write(response)
+                make_thumbnail(bucket_name, object_name, target_bucket_name, target_object_name)
     except Exception:
         raise Exception('Download failed')
 
@@ -88,26 +89,23 @@ def execute_factor(log, task):
             log.info('Object name: %s', object_name)
             log.info('Download each file')
 
-            download_object(bucket_name, object_name)
-            make_thumbnail(bucket_name, object_name, target_bucket_name, target_object_name)
+            download_object(bucket_name, object_name, target_bucket_name, target_object_name)
+            # make_thumbnail(bucket_name, object_name, target_bucket_name, target_object_name)
 
         else:
             log.info('No Object name given')
-            log.info(requests.get(SOS_BASE_URL + '/' + bucket_name + '?list').content)
+            # log.info(requests.get(SOS_BASE_URL + '/' + bucket_name + '?list').content)
+            r = requests.get(SOS_BASE_URL + '/' + bucket_name + '?list')
+            resp = r.json()
+            for obj in resp['objects']:
+                log.info(obj)
+                object_name = obj['name']
+                download_object(bucket_name, object_name, target_bucket_name, object_name)
+                # make_thumbnail(bucket_name, object_name, target_bucket_name, object_name)
             log.info('Download all objects in bucket')
     else:
         log.info('No Bucket name given')
         log.info('Cannot download')
-
-    # subprocess.run(["docker run", "-v $(pwd)/resources:/resources" "video_thumnailer" "make_thumbnail" "vatanika.mp4" "output.gif"])
-    # subprocess.run(["./make_thumbnail.sh", "vatanika.mp4", "o4.gif"])
-    # subprocess.run(["pwd"])
-    # subprocess.run(["ls", "-la"])
-    # subprocess.run(["ls", "resources/gif"])
-    #
-    # print('in get_sos_list')
-    # log.info(requests.get('http://sos:8080/all').content)
-
 
 def main():
     LOG.info('Starting a worker...')
