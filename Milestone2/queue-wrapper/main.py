@@ -52,16 +52,36 @@ def get_sos_list():
 def make_thumbnail():
     try:
         body = request.json
+        if not body:
+            raise Exception('Missing Json Body')
         if 'bucket' not in body:
             raise Exception('Missing Bucket name')
+        if 'target_bucket' not in body:
+            body['target_bucket'] = body['bucket']
         if 'object' not in body:
             loop_push_in_queue(body)
         else: # contain both bucket_name and object_name
-            LOG.info(body)
-            # push_in_queue(body)
+            # if 'target_object' not in body:
+            #     body['target_object'] = body['object'] + ".gif"
+            # else:
+            #     target_object_name = body['target_object']
+            #     if not target_object_name.endswith(".gif"):
+            #         body['target_object'] = target_object_name + ".gif"
+            new_body = check_target_object_name(body)
+            LOG.info(new_body)
+            push_in_queue(new_body)
         return jsonify({'status': 'OK'})
     except Exception as ex:
-        return jsonify({'status': 'BAD REQUEST', 'error description': ex.args})
+        return jsonify({'status': 'BAD REQUEST', 'error description': ex.args}), 400
+
+def check_target_object_name(body):
+    if 'target_object' not in body:
+        body['target_object'] = body['object'] + ".gif"
+    else:
+        target_object_name = body['target_object']
+        if not target_object_name.endswith(".gif"):
+            body['target_object'] = target_object_name + ".gif"
+    return body
 
 def loop_push_in_queue(body):
     bucket_name = body['bucket']
@@ -70,10 +90,10 @@ def loop_push_in_queue(body):
         raise Exception('No Object in Bucket')
     for obj in objects:
         object_name = obj['name']
-        LOG.info(object_name)
-        tmp_body = jsonify({'bucket': bucket_name, 'object': object_name})
-        LOG.info(tmp_body.json)
-        # push_in_queue(tmp_body)
+        body['object'] = object_name
+        body['target_object'] = object_name + ".gif"
+        LOG.info(body)
+        push_in_queue(body)
 
 def list_objects_in_bucket(bucket_name):
     r = requests.get(SOS_BASE_URL + '/' + bucket_name + '?list')
