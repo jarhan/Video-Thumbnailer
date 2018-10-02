@@ -27,6 +27,8 @@ services:
       - REDIS_QUEUE=redis
     ports:
       - '5000:5000'
+    extra_hosts:
+      - "sos:172.24.0.1"
 
   # sos:
   #   image: jarhan/simple-object-storage
