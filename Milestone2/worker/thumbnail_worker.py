@@ -6,6 +6,7 @@ import uuid
 import redis
 import requests
 import subprocess
+import hashlib
 
 LOG = logging
 REDIS_QUEUE_LOCATION = os.getenv('REDIS_QUEUE', 'localhost')
@@ -81,19 +82,53 @@ def make_thumbnail(bucket_name, object_name):
     except Exception:
         raise Exception('Make .gif failed')
 
+def upload_gif(bucket_name, object_name, target_bucket_name, target_object_name):
+    create_bucket_r = requests.post(SOS_BASE_URL + '/' + target_bucket_name + '?create')
+    create_bucket_response_status = create_bucket_r.status_code
+    if (create_bucket_response_status != 200 and create_bucket_response_status != 400):
+        raise Exception("Cannot create bucket")
+
+    create_object_r = requests.post(SOS_BASE_URL + '/' + target_bucket_name + '/' + target_object_name + '?create')
+    create_object_response_status = create_object_r.status_code
+    if (create_object_response_status != 200):
+        raise Exception("Cannot create object")
+
+    gif_file_path = './resources/gif/' + bucket_name + '/' + object_name + '.gif'
+    upload_url = SOS_BASE_URL + '/' + target_bucket_name + '/' + target_object_name + '?partNumber=1'
+    data = open(gif_file_path, 'rb').read()
+
+    upload_object_r = requests.put(url=upload_url, data=data, headers={ 'Content-MD5': hashlib.md5(data).hexdigest()})
+    upload_object_response_status = upload_object_r.status_code
+    if (upload_object_response_status != 200):
+        if (upload_object_response_status == 400):
+            error_description = 'Error from upload'
+            # error_description = upload_object_response['error']
+            raise Exception(error_description)
+        else: raise Exception("Cannot upload object")
+
+    complete_object_r = requests.post(SOS_BASE_URL + '/' + target_bucket_name + '/' + target_object_name + '?complete')
+    complete_object_response_status = complete_object_r.status_code
+    if (complete_object_response_status != 200):
+        raise Exception("Cannot complete object")
+
 def execute(log, task):
-    bucket_name = task.get('bucket')
-    object_name = task.get('object')
-    target_bucket_name = task.get('target_bucket')
-    target_object_name = task.get('target_object')
+    try:
+        bucket_name = task.get('bucket')
+        object_name = task.get('object')
+        target_bucket_name = task.get('target_bucket')
+        target_object_name = task.get('target_object')
 
-    log.info("in execute")
-    log.info(task)
+        log.info("in execute")
+        log.info(task)
 
-    download_object(bucket_name, object_name)
-    make_thumbnail(bucket_name, object_name)
+        # download_object(bucket_name, object_name)
+        # make_thumbnail(bucket_name, object_name)
+        upload_gif(bucket_name, object_name, target_bucket_name, target_object_name)
 
-    log.info("done")
+        log.info("done")
+    except Exception as ex:
+        log.info("except in execute")
+        log.info(ex.args)
 
     # make_thumbnail(bucket_name, object_name)
 
