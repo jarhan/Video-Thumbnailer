@@ -10,7 +10,7 @@ LOG.basicConfig(
     level=LOG.DEBUG,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
-SOS_BASE_URL = 'http://sos:8080'
+SOS_BASE_URL = 'http://localhost:8080'
 
 app = Flask(__name__)
 
@@ -25,28 +25,6 @@ class RedisResource:
         port = (int(port),)
 
     conn = redis.Redis(host=host, *port)
-
-@app.route('/factor', methods=['POST'])
-def post_factor_job():
-    body = request.json
-    json_packed = json.dumps(body)
-    print('packed:', json_packed)
-    RedisResource.conn.rpush(
-        RedisResource.QUEUE_NAME,
-        json_packed)
-
-    return jsonify({'status': 'OK'})
-
-@app.route('/list-sos', methods=['GET'])
-def get_sos_list():
-    body = request.json
-    json_packed = json.dumps(body)
-    print('packed:', json_packed)
-    RedisResource.conn.rpush(
-        RedisResource.QUEUE_NAME,
-        json_packed)
-
-    return jsonify({'status': 'OK'})
 
 @app.route('/<bucket_name>', methods=['GET'])
 def list_gif_in_bucket(bucket_name):

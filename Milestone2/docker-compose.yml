@@ -15,8 +15,8 @@ services:
       - REDIS_QUEUE=redis
     volumes:
       - ./worker:/app
-    extra_hosts:
-      - "sos:172.24.0.1"
+    # extra_hosts:
+    #   - "sos:172.24.0.1"
 
   queue-wrapper:
     build:
@@ -27,10 +27,40 @@ services:
       - REDIS_QUEUE=redis
     ports:
       - '5000:5000'
-    extra_hosts:
-      - "sos:172.24.0.1"
+    # extra_hosts:
+    #   - "sos:172.24.0.1"
 
-  # sos:
-  #   image: jarhan/simple-object-storage
-  #   ports:
-  #     - '8080:8080'
+  sos:
+    container_name: simple-object-storage
+    restart: unless-stopped
+    build:
+      context: simple-object-storage
+    ports:
+    - '8080:8080'
+
+    depends_on:
+      - mongo
+
+    environment:
+      DATABASE_HOST: mongo
+      DATABASE_PORT: 27017
+      DATABASE_NAME: bucketDB
+      DATABASE_USER: jarhan
+      DATABASE_PASSWORD: 123456
+      AUTHENTICATION_DATABASE: admin
+
+    volumes:
+      - './simple-object-storage/data:/app/data'
+
+  mongo:
+    container_name: mongo
+    image: mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: jarhan
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+      MONGO_INITDB_DATABASE: bucketDB
+
+    volumes:
+    - './simple-object-storage/data/db:/data/db'
+    - './simple-object-storage/data/configdb:/data/configdb'
