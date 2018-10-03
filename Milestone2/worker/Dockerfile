@@ -17,6 +17,10 @@ COPY ./requirements.txt /app/requirements.txt
 RUN pip install -r /app/requirements.txt
 RUN pip install requests
 
+RUN mkdir resources/frames
+RUN mkdir resources/gif
+RUN mkdir resources/video
+
 # Copy everthing from . to /app inside the 'box'
 COPY . /app
 WORKDIR /app
