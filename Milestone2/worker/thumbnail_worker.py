@@ -10,11 +10,9 @@ import hashlib
 
 LOG = logging
 REDIS_QUEUE_LOCATION = os.getenv('REDIS_QUEUE', 'localhost')
-# SOS_ENV = os.getenv('SOS_HOST', 'localhost')
 
 QUEUE_NAME = 'queue:factoring'
-SOS_BASE_URL = 'http://localhost:8080'
-# SOS_BASE_URL = f"http://{SOS_ENV}:8080"
+SOS_BASE_URL = 'http://simple-object-storage:8080'
 
 INSTANCE_NAME = uuid.uuid4().hex
 

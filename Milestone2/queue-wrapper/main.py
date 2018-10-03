@@ -10,7 +10,7 @@ LOG.basicConfig(
     level=LOG.DEBUG,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
-SOS_BASE_URL = 'http://localhost:8080'
+SOS_BASE_URL = 'http://simple-object-storage:8080'
 
 app = Flask(__name__)
 

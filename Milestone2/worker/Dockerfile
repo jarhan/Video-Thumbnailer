@@ -17,6 +17,7 @@ COPY ./requirements.txt /app/requirements.txt
 RUN pip install -r /app/requirements.txt
 RUN pip install requests
 
+RUN mkdir resources
 RUN mkdir resources/frames
 RUN mkdir resources/gif
 RUN mkdir resources/video
