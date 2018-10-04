@@ -40,7 +40,8 @@ echo $gif_size
 # generate .gif
 convert -resize $gif_size -delay 30 -loop 0 resources/frames/${worker_name}/${bucket_name}/${object_name}/frame_*.bmp resources/gif/${worker_name}/${bucket_name}/${object_name}.gif
 
-# delete created frames
-rm -f resources/frames/${worker_name}/${bucket_name}/${object_name}/frame_*.bmp
+# delete created folder
+rm -rf resources/frames/${worker_name}/${bucket_name}
+rm -rf resources/video/${worker_name}/${bucket_name}
 
 echo "done"

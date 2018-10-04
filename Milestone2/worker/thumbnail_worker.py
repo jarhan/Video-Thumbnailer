@@ -110,6 +110,8 @@ def upload_gif(bucket_name, object_name, target_bucket_name, target_object_name)
 
     complete_object_r = requests.post(SOS_BASE_URL + '/' + target_bucket_name + '/' + target_object_name + '?complete')
     complete_object_response_status = complete_object_r.status_code
+
+    # gif_path = "./resources/video/"+INSTANCE_NAME+"/"+bucket_name
     if (complete_object_response_status != 200):
         raise Exception("Cannot complete object")
 
