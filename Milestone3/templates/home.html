@@ -1,0 +1,23 @@
+<html>
+<body>
+  {% block body %}
+    <h1>Video Thumbnailer</h1>
+    <h3>
+      List Videos in Bucket:
+      <input type="text" name="bucket_name" id="bucket_name"/>
+    </h3>
+    <button type="button" onclick="redirect_to_show_all_videos()">List Videos newer</button>
+  {% endblock %}
+
+  <script>
+    function redirect_to_show_all_videos() {
+      bucket = "dir"
+      window.location.href='{{ url_for( 'show_all_videos' , bucket_name=bucket ) }}';
+    }
+    function get_bucket_name() {
+      bucket_name = document.getElementById("bucket_name").value;
+      return bucket_name
+    }
+  </script>
+</body>
+</html>

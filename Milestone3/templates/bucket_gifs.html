@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+.grid-container {
+  display: grid;
+  grid-template: auto / auto auto auto auto;
+  grid-gap: 10px;
+  background-color: #2196F3;
+  padding: 10px;
+}
+.grid-container>div {
+  background-color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  padding:20px 0;
+  font-size: 30px;
+}
+</style>
+</head>
+<body>
+
+  <h1>GIFs images in Bucket: {{bucket_name}}</h1>
+  <form action = "http://localhost:34782/delete/{{bucket_name}}" method = "DELETE">
+     <p><input type = "submit" value = "Delete All Thumbnails" /></p>
+  </form>
+
+  <div class="grid-container">
+    {% for obj in objects %}
+
+      <div class="item{{ obj }}">
+        <img src="http://localhost:8080/{{bucket_name}}/{{obj}}" alt="{{obj}}" style="max-width:300px;max-height:300px;">
+        <h4>{{ obj }}</h4>
+        <form action = "http://localhost:34782/delete/{{bucket_name}}/{{obj}}" method = "DELETE">
+           <p><input type = "submit" value = "Delete Thumbnail" /></p>
+        </form>
+      </div>
+
+    {% endfor %}
+  </div>
+
+</body>
+</html>

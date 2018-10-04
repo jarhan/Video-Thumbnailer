@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+   <body>
+     <h1> Bucket Name: {{bucket_name}} </h1>
+     <!-- <h3><button type="button" onclick="alert('Make It! Make It! Make It!')">Make Thumbnail for All Videos</button></h3> -->
+     <form action = "http://localhost:34782/make-thumbnail/{{bucket_name}}" method = "POST">
+        <p><input type = "submit" value = "Make Thumbnail for All Videos" /></p>
+     </form>
+
+     <table border = 1>
+        {% for obj in objects %}
+
+           <tr>
+              <th><h2> {{ obj }} </h2></th>
+              <th>
+                <form action = "http://localhost:34782/make-thumbnail/{{bucket_name}}/{{obj}}" method = "POST">
+                   <p><input type = "submit" value = "Make Thumbnail" /></p>
+                </form>
+              </th>
+           </tr>
+
+        {% endfor %}
+     </table>
+
+   </body>
+</html>
