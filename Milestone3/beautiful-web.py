@@ -3,7 +3,7 @@ import requests
 import logging
 
 WEB_URL = "http://localhost:34782/"
-SOS_BASE_URL = 'http://localhost:8080'
+SOS_BASE_URL = 'http://simple-object-storage:8080'
 MAKE_THUMBNAIL = 'http://localhost:5000'
 
 LOG = logging
