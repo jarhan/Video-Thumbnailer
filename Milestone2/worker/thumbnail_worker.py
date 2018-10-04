@@ -61,12 +61,12 @@ def download_object(bucket_name, object_name):
             r = requests.get(SOS_BASE_URL + '/' + bucket_name + '/' + object_name)
 
             response = r.content
-
+            LOG.info(r.status_code)
+            if (r.status_code != 200):
+                raise Exception('Download failed')
+            #     os.mkdir("./resources/video/"+bucket_name+"/"+object_name)
             f= open("./resources/video/"+bucket_name+"/"+object_name,"wb")
             f.write(response)
-        # LOG.info(bucket_name)
-        # LOG.info(object_name)
-        # make_thumbnail(bucket_name, object_name)
     except Exception:
         raise Exception('Download failed')
 
@@ -120,41 +120,14 @@ def execute(log, task):
         log.info("in execute")
         log.info(task)
 
-        # download_object(bucket_name, object_name)
-        # make_thumbnail(bucket_name, object_name)
+        download_object(bucket_name, object_name)
+        make_thumbnail(bucket_name, object_name)
         upload_gif(bucket_name, object_name, target_bucket_name, target_object_name)
 
         log.info("done")
     except Exception as ex:
         log.info("except in execute")
         log.info(ex.args)
-
-    # make_thumbnail(bucket_name, object_name)
-
-    # if bucket_name:
-    #     log.info('Bucket name: %s', bucket_name)
-    #
-    #     if object_name:
-    #         log.info('Object name: %s', object_name)
-    #         log.info('Download each file')
-    #
-    #         download_object(bucket_name, object_name, target_bucket_name, target_object_name)
-    #         # make_thumbnail(bucket_name, object_name, target_bucket_name, target_object_name)
-    #
-    #     else:
-    #         log.info('No Object name given')
-    #         # log.info(requests.get(SOS_BASE_URL + '/' + bucket_name + '?list').content)
-    #         r = requests.get(SOS_BASE_URL + '/' + bucket_name + '?list')
-    #         resp = r.json()
-    #         for obj in resp['objects']:
-    #             log.info(obj)
-    #             object_name = obj['name']
-    #             download_object(bucket_name, object_name, target_bucket_name, object_name)
-    #             # make_thumbnail(bucket_name, object_name, target_bucket_name, object_name)
-    #         log.info('Download all objects in bucket')
-    # else:
-    #     log.info('No Bucket name given')
-    #     log.info('Cannot download')
 
 def main():
     LOG.info('Starting a worker...')
