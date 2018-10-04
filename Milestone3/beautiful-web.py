@@ -18,35 +18,6 @@ app = Flask(__name__)
 def student():
     return render_template('home.html')
 
-@app.route('/result',methods = ['POST', 'GET'])
-def result():
-    if request.method == 'POST':
-        print(request)
-        result = request.form
-        return render_template("result.html",result = result)
-
-@app.route('/show_all_videos',methods = ['POST', 'GET'])
-def show_all_videos_tmp():
-    result = request.form
-
-    LOG.info('show_all_videos_tmp')
-    # LOG.info(request.arges.get('bucket_name'))
-    # LOG.info(request.form.get('bucket_name'))
-    # LOG.info(bucket_name)
-    for each in result.items():
-        LOG.info(each)
-    LOG.info('hi')
-    return render_template("make_thumbnail_page.html")
-    # for key, value in result.items():
-    #     LOG.info(key)
-    #     LOG.info(value)
-
-    # if request.method == 'POST':
-    #     result = request.form
-    #     # show_all_videos(result.)
-    #     LOG.info(request.args.get('bucket_name'))
-        # return render_template("result.html", result = result)
-
 @app.route('/delete/<bucket_name>',methods = ['DELETE', 'GET'])
 def delete_thumbnail_all(bucket_name):
     try:
@@ -92,24 +63,6 @@ def make_thumbnail(bucket_name, object_name):
         return redirect(WEB_URL + bucket_name + "/show_all_gifs")
     except Exception as e:
         return render_template("error_page.html")
-
-
-# @app.route('/<bucket_name>/show_all_videos',methods = ['POST', 'GET'])
-# def show_all_videos(bucket_name):
-#     object_collector = []
-#     try:
-#         r = requests.get(SOS_BASE_URL + '/' + bucket_name + '?list')
-#         resp = r.json()
-#         objects = resp['objects']
-#
-#         for obj in objects:
-#             object_name = obj['name']
-#             object_collector.append(object_name)
-#
-#     except Exception as e:
-#         bucket_name = bucket_name + " does not exist"
-#
-#     return render_template("bucket_videos.html", bucket_name = bucket_name, objects = object_collector)
 
 @app.route('/<bucket_name>/show_all_<object>s', methods=['POST', 'GET'])
 def show_all(bucket_name, object):
