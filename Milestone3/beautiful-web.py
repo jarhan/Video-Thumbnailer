@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect
 import requests
 import logging
 
+WEB_URL = "http://localhost:34782/"
 SOS_BASE_URL = 'http://localhost:8080'
 MAKE_THUMBNAIL = 'http://localhost:5000'
 
@@ -55,7 +56,7 @@ def delete_thumbnail_all(bucket_name):
 
         for obj in objects:
             delete_thumbnail(bucket_name, obj['name'])
-        return redirect("http://localhost:34782/" + bucket_name + "/show_all_gifs")
+        return redirect(WEB_URL + bucket_name + "/show_all_gifs")
     except:
         return render_template("error_page.html")
 
@@ -65,7 +66,7 @@ def delete_thumbnail(bucket_name, object_name):
     try:
         r = requests.delete(SOS_BASE_URL + '/' + bucket_name + '/' + object_name + '?delete')
         LOG.info(r.content)
-        return redirect("http://localhost:34782/" + bucket_name + "/show_all_gifs")
+        return redirect(WEB_URL + bucket_name + "/show_all_gifs")
     except Exception as e:
         return render_template("error_page.html")
 
@@ -78,7 +79,7 @@ def make_thumbnail_all(bucket_name):
 
         for obj in objects:
             make_thumbnail(bucket_name, obj['name'])
-        return redirect("http://localhost:34782/" + bucket_name + "/show_all_gifs")
+        return redirect(WEB_URL + bucket_name + "/show_all_gifs")
     except:
         return render_template("error_page.html")
 
@@ -88,7 +89,7 @@ def make_thumbnail(bucket_name, object_name):
     try:
         r = requests.post(MAKE_THUMBNAIL + '/make-thumbnail', json={"bucket": bucket_name, "object": object_name})
         LOG.info(r.content)
-        return redirect("http://localhost:34782/" + bucket_name + "/show_all_gifs")
+        return redirect(WEB_URL + bucket_name + "/show_all_gifs")
     except Exception as e:
         return render_template("error_page.html")
 

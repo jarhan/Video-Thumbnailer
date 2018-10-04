@@ -2,11 +2,15 @@
 <html>
 <head>
 <style>
+html {
+  background:#C9E0D6;
+  font-family: 'Open Sans Condensed', sans-serif;
+  color: #5A626F;
+}
 .grid-container {
   display: grid;
   grid-template: auto / auto auto auto auto;
   grid-gap: 10px;
-  background-color: #2196F3;
   padding: 10px;
 }
 .grid-container>div {
@@ -19,7 +23,7 @@
 </head>
 <body>
 
-  <h1>GIFs images in Bucket: {{bucket_name}}</h1>
+  <h1>GIFs images in Bucket {{bucket_name}}</h1>
   <form action = "http://localhost:34782/delete/{{bucket_name}}" method = "DELETE">
      <p><input type = "submit" value = "Delete All Thumbnails" /></p>
   </form>
